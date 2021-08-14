@@ -2,20 +2,30 @@
   <div class="note" :style="note">
     <el-form ref="AccountForm" :model="account" :rules="rules" label-position="left" label-width="0px"
             class="demo-ruleForm login-container form-sty">
-      <h3 class="title">欢迎登录</h3>
+      <h3 class="title">用户注册</h3>
       <el-form-item prop="username">
-        <el-input type="text" v-model="account.username" auto-complete="off" placeholder="手机号或公司企业码"></el-input>
+        <el-input type="text" v-model="account.username" auto-complete="off" placeholder="用户名"></el-input>
       </el-form-item>
+    
       <el-form-item prop="pwd">
-        <el-input type="password" v-model="account.pwd" :autofocus="pwdFocus" auto-complete="off" placeholder="请输入登录密码"></el-input>
+        <el-input type="password" v-model="account.pwd" auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
+      <el-form-item prop="phone">
+        <el-input type="text" v-model="account.phone"  auto-complete="off" placeholder="手机号"></el-input>
+      </el-form-item>
+      <el-form-item prop="code">
+        <el-input type="text" v-model="account.code" auto-complete="off" placeholder="验证码" style="width:155px"></el-input>
+        <el-button class="btn-orange" :disabled="disabled" @click="getCode">{{valiBtn}}</el-button>
+      </el-form-item>
+
       <!--<el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>-->
       <el-form-item class="extra-text">
-        <a href="javascript:;" class="forget-pwd" title="找回密码">忘记密码?</a>
-        <router-link :to="{path: '/register'}" class="reg-text" title="立即注册">立即注册</router-link>
+        <!-- <a href="javascript:;" class="forget-pwd" title="登录页面">登录页面</a> -->
+        <router-link :to="{path: '/login'}" class="forget-pwd"  title="登录页面">登录页面</router-link>
+        <router-link :to="{path: '/register'}" class="reg-text" title="找回密码">找回密码</router-link>
       </el-form-item>
       <el-form-item style="width:100%;">
-        <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin" :disabled="allowLogin" :loading="loading">登录</el-button>
+        <el-button type="primary" style="width:100%;" @click.native.prevent="register" :disabled="allowLogin" :loading="loading">注册</el-button>
       </el-form-item>
     </el-form>
 </div>
@@ -31,7 +41,7 @@
         } else {
           if (this.account.username !== '') {
             this.account.username = value;
-			this.validateCorrect();
+			      this.validateCorrect();
           }
           callback();
         }
@@ -42,6 +52,28 @@
         } else {
           if (this.account.pwd !== '') {
             this.account.pwd = value;
+            this.validateCorrect();
+          }
+          callback();
+        }
+      };
+      var validatePhone = (rules, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入手机号'));
+        } else {
+          if (this.account.phone !== '') {
+            this.account.phone = value;
+            this.validateCorrect();
+          }
+          callback();
+        }
+      };
+      var validateCode = (rules, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入验证码'));
+        } else {
+          if (this.account.code !== '') {
+            this.account.code = value;
             this.validateCorrect();
           }
           callback();
@@ -59,7 +91,9 @@
         loading: false,
         account: {
           username: '',
-          pwd: ''
+          pwd: '',
+          phone: '',
+          code: ''
         },
         rules: {
           username: [
@@ -68,11 +102,19 @@
           ],
           pwd: [
             {required: true, validator: validatePwd, trigger: 'change'}
+          ],
+          phone: [
+            {required: true, validator: validatePhone, trigger: 'change'}
+          ],
+          code: [
+            {required: true, validator: validateCode, trigger: 'change'}
           ]
         },        
         pwdFocus: false,
 		    allowLogin: true,
-        checked: true
+        checked: true,
+        valiBtn:'获取验证码',
+        disabled:false
       };
     },
     created() {
@@ -84,40 +126,73 @@
       }
     },
     methods: {
-      handleLogin(){
+      register(){
         let that = this;
         let result = {
           // id: '1',
           username: this.account.username,
-          password: this.account.pwd
-          // nickname: this.account.username,
-          // name: 'administrator',
-          // email: '888888@163.com'
+          password: this.account.pwd,
+          phone: this.account.phone,
+          code: this.account.code
         };
         this.loading = true;
-        // let status = API.login(result); userLogin
-        API.post('/login',JSON.stringify(result))
+        API.post('/register',JSON.stringify(result))
         .then((res)=>{
             if(res.code === 20000){
-              localStorage.setItem('access-user', JSON.stringify(result));
-              window.localStorage.removeItem('register-user');
-              that.$router.push({path: '/'});
+                this.$message({
+                message: res.message,
+                type: 'success'
+              });
             }else{
-               this.loading = false;
-               this.$message.error("登录失败，账号或密码错误");
+              this.$message({
+              message: res.message,
+              type: 'warning'
+              });
             }
-            console.log(res)
           })
       },
 	  validateCorrect(){
-        if(this.account.pwd.trim().length > 0 && this.account.username.trim().length > 0){
+        if(this.account.pwd.trim().length > 0 && this.account.username.trim().length > 0 && this.account.phone.trim().length > 0 && this.account.code.trim().length > 0){
           this.allowLogin = false;
         } else {
           this.allowLogin = true;
         }
+      },
+    getCode(){
+      this.tackBtn(); //验证码倒计时
+      let that = this;
+      API.post('/getCode',JSON.stringify(this.account.phone))
+      .then((res)=>{
+            if(res.code === 20000){
+              this.$message({
+              message: res.message,
+              type: 'success'
+            });
+          }else{
+            this.$message({
+            message: res.message,
+            type: 'warning'
+            });
+          }
+          console.log(res)
+        })
+      },
+      tackBtn(){       //验证码倒数60秒
+          let time = 60;
+          let timer = setInterval(() => {
+              if(time == 0){
+                  clearInterval(timer);
+                  this.valiBtn = '获取验证码';
+                  this.disabled = false;
+              }else{
+                  this.disabled = true;
+                  this.valiBtn = time + '秒后重试';
+                  time--;
+              }
+          }, 1000);
+        }
       }
     }
-  }
 </script>
 <style scoped>
   /* .form-sty{

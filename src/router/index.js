@@ -1,6 +1,3 @@
-/**
- * Created by yqr on 2018/3/26.
- */
 import Vue from 'vue'
 import Router from 'vue-router'
 import TopNav from '@/components/nav/topNav.vue'
@@ -17,9 +14,11 @@ import EnterpriseValidate from '@/views/enterprise/validate.vue'
 import VehicleManage from '@/views/vehicle/index.vue'
 import DeptManager from '@/views/dept/index.vue'
 import NotFound from '@/components/404.vue'
+import Register from '@/views/register'
 
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/views/login'], resolve)
+// const Register = resolve => require(['@/views/register'], resolve)
 
 Vue.use(Router)
 
@@ -29,6 +28,12 @@ let router = new Router({
       path: '/login',
       type: 'login',
       component: Login
+    },
+    {
+      path: '/register',
+      type: 'register',
+      // redirect: '/register',
+      component: Register
     },
     {
       path: '*',
@@ -222,14 +227,15 @@ let router = new Router({
 });
 
 router.beforeEach((to, from, next) => {
-  // console.log('to:' + to.path)
+  console.log('to:' + to.path)
   if (to.path.startsWith('/login')) {
     window.localStorage.removeItem('access-user')
     next()
   } else {
     let user = JSON.parse(window.localStorage.getItem('access-user'))
     if (!user) {
-      next({path: '/login'})
+      // next({path: '/login'})
+      next()
     } else {
       next()
     }
