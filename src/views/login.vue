@@ -95,6 +95,7 @@
           // email: '888888@163.com'
         };
         this.loading = true;
+        debugger;
         // let status = API.login(result); userLogin
         API.post('/login',JSON.stringify(result))
         .then((res)=>{
