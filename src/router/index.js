@@ -15,6 +15,7 @@ import VehicleManage from '@/views/vehicle/index.vue'
 import DeptManager from '@/views/dept/index.vue'
 import NotFound from '@/components/404.vue'
 import Register from '@/views/register'
+import RetrievePwd from '@/views/retrievePwd'
 
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/views/login'], resolve)
@@ -32,8 +33,12 @@ let router = new Router({
     {
       path: '/register',
       type: 'register',
-      // redirect: '/register',
       component: Register
+    },
+    {
+      path: '/retrievePwd',
+      type: 'retrievePwd',
+      component: RetrievePwd
     },
     {
       path: '*',

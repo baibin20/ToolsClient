@@ -2,7 +2,7 @@
   <div class="note" :style="note">
     <el-form ref="AccountForm" :model="account" :rules="rules" label-position="left" label-width="0px"
             class="demo-ruleForm login-container form-sty">
-      <h3 class="title">用户注册</h3>
+      <h3 class="title">找回密码</h3>
       <el-form-item prop="username">
         <el-input type="text" v-model="account.username" auto-complete="off" placeholder="用户名"></el-input>
       </el-form-item>
@@ -21,7 +21,7 @@
       <el-form-item class="extra-text">
         <!-- <a href="javascript:;" class="forget-pwd" title="登录页面">登录页面</a> -->
         <router-link :to="{path: '/login'}" class="forget-pwd"  title="登录页面">登录页面</router-link>
-        <router-link :to="{path: '/retrievePwd'}" class="reg-text" title="找回密码">找回密码</router-link>
+        <router-link :to="{path: '/register'}" class="reg-text" title="找回密码">注册页面</router-link>
       </el-form-item>
       <el-form-item style="width:100%;">
         <el-button type="primary" style="width:100%;" @click.native.prevent="register" :disabled="allowLogin" :loading="loading">注册</el-button>
