@@ -16,7 +16,9 @@ import DeptManager from '@/views/dept/index.vue'
 import NotFound from '@/components/404.vue'
 import Register from '@/views/register'
 import RetrievePwd from '@/views/retrievePwd'
-
+import automatic from '@/views/jobpalletbind/automatic.vue'
+import manual from '@/views/jobpalletbind/manual.vue'
+import explanation from '@/views/jobpalletbind/explanation'
 // 懒加载方式，当路由被访问的时候才加载对应组件
 const Login = resolve => require(['@/views/login'], resolve)
 // const Register = resolve => require(['@/views/register'], resolve)
@@ -140,27 +142,39 @@ let router = new Router({
       ]
     },
     {
-      path: '/vehicleManager',
+      path: '/enterpriseManager',
       type: 'enterprise',
-      name: 'vehicle',
+      name: 'enterprise',
       component: Home,
-      redirect: '/vehicle/list',
+      redirect: '/enterprise/list',
       menuShow: true,
       children: [
         {
-          path: '/vehicle/list',
+          path: '/enterprise/list',
           name: '前台表示',
           components: {
-            default: VehicleManage,
+            default: EnterpriseList,
             top: TopNav,
-            aside:  LeftNav
+            aside: LeftNav
           },
-          leaf: true, // 只有一个节点
-          iconCls: 'iconfont icon-home', // 图标样式class
+          leaf: true,
+          iconCls: 'el-icon-setting',
           menuShow: true
         },
         {
-          path: '/vehicle/add',
+          path: '/enterprise/detail',
+          name: '企业详情',
+          components: {
+            default: EnterpriseDetail,
+            top: TopNav,
+            aside: LeftNav
+          },
+          leaf: true,
+          iconCls: 'el-icon-setting',
+          menuShow: false
+        },
+        {
+          path: '/enterprise/add',
           name: '后台设定',
           components: {
             default: EnterpriseAdd,
@@ -170,11 +184,12 @@ let router = new Router({
           leaf: true,
           iconCls: 'el-icon-menu',
           menuShow: true
-        },{
-          path: '/vehicle/add1',
+        },
+        {
+          path: '/enterprise/validate',
           name: '操做说明',
           components: {
-            default: EnterpriseAdd,
+            default: EnterpriseValidate,
             top: TopNav,
             aside: LeftNav
           },
@@ -184,6 +199,53 @@ let router = new Router({
         }
       ]
     },
+    // WMS组盘表
+    {
+      path: '/jobPalletbind',
+      type: 'jobpalletbind',
+      name: 'jobpalletbind',
+      component: Home,
+      redirect: '/jobpalletbind/automatic',
+      menuShow: true,
+      children: [
+        {
+          path: '/jobpalletbind/automatic',
+          name: '自动组盘',
+          components: {
+            default: automatic,
+            top: TopNav,
+            aside:  LeftNav
+          },
+          leaf: true, // 只有一个节点
+          iconCls: 'iconfont icon-home', // 图标样式class
+          menuShow: true
+        },
+        {
+          path: '/jobpalletbind/manual',
+          name: '手动组盘',
+          components: {
+            default: manual,
+            top: TopNav,
+            aside: LeftNav
+          },
+          leaf: true,
+          iconCls: 'el-icon-menu',
+          menuShow: true
+        },{
+          path: '/jobpalletbind/explanation',
+          name: '操做说明',
+          components: {
+            default: explanation,
+            top: TopNav,
+            aside: LeftNav
+          },
+          leaf: true,
+          iconCls: 'el-icon-menu',
+          menuShow: true
+        }
+      ]
+    },
+    
     {
       path: '/deptManager',
       type: 'enterprise',

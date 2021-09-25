@@ -14,7 +14,8 @@
           <el-col :span="24">
             <el-menu :default-active="defaultActiveIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true">
               <el-menu-item index="/">工作台</el-menu-item>
-              <el-menu-item index="/enterpriseManager">WCS模拟器</el-menu-item>
+              <el-menu-item index="/jobPalletbind">WMS组盘</el-menu-item>
+              <el-menu-item index="/enterpriseManager">WCS模拟器</el-menu-item>              
               <!-- <el-menu-item index="/orderManager">待办</el-menu-item>
               <el-menu-item index="/systemManager">待办</el-menu-item> -->
             </el-menu>
