@@ -5,8 +5,8 @@
   "author": "Lena",
   "private": true,
   "scripts": {
-    "server": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "start": "npm run dev",
+    "server": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
+    "start": "npm run dev || --host 0.0.0.0",
     "build": "node build/build.js"
   },
   "dependencies": {
