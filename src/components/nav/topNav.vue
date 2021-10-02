@@ -6,7 +6,7 @@
         <a href="/"><img src="../../assets/logo.png" style="padding-left:8px;"></a>
       </div>
       <div class="topbar-logos">
-        <a href="/" style="color: #fff;"><span v-show="!$store.state.collapsed">WCS模拟器</span></a>
+        <a href="/" style="color: #fff;"><span v-show="!$store.state.collapsed">模拟器</span></a>
       </div>
       <div class="topbar-title">
         <!-- 注意：这里就是topNavState作用之处，根据当前路由所在根路由的type值判断显示不同顶部导航菜单 -->
@@ -15,9 +15,9 @@
             <el-menu :default-active="defaultActiveIndex" class="el-menu-demo" mode="horizontal" @select="handleSelect" :router="true">
               <el-menu-item index="/">工作台</el-menu-item>
               <el-menu-item index="/jobPalletbind">WMS组盘</el-menu-item>
-              <el-menu-item index="/enterpriseManager">WCS模拟器</el-menu-item>              
+              <el-menu-item index="/enterpriseManager">模拟器</el-menu-item>              
               <!-- <el-menu-item index="/orderManager">待办</el-menu-item>
-              <el-menu-item index="/systemManager">待办</el-menu-item> -->
+              <el-menu-item index="/systemManager">待办</el-menu-item> --> 
             </el-menu>
           </el-col>
         </el-row>
