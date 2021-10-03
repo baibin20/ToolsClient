@@ -124,10 +124,10 @@
         API.post('/findInstallJpbpPalletBind/submit',JSON.stringify(this.form))
         .then((res)=>{
             if(res.code === 20000){    
-                this.options = res.data          
+                this.$message.success(res.message);
             //   this.$message.success(res.data);
             }else{               
-               this.$message.error("登录失败，账号或密码错误");
+               this.$message.error(res.message);
             }
             console.log(res)
           })
