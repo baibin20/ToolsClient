@@ -1,6 +1,6 @@
 <template>
- <el-form ref="form" :model="from" label-width="300px">
-  <el-form-item label="托盘号起始号" >
+ <el-form  ref="form" :model="form" label-width="300px" :rules="rules">
+  <el-form-item label="托盘号起始号" prop="code_pallet">
     <el-input v-model="form.code_pallet" style="widht:40px"></el-input>
   </el-form-item>
   <el-form-item label="托盘种类">
@@ -26,7 +26,7 @@
   <el-form-item label="托盘可载数" >
     <el-input v-model="form.qty" style="widht:40px"></el-input>
   </el-form-item>
-  <el-form-item label="QR发行日期">
+  <el-form-item label="QR发行日期" prop="startTime">
     <el-col :span="3">
       <!-- <el-date-picker type="date" placeholder="选择开始日期" v-model="form.date1" style="width: 100%;"></el-date-picker> -->
         <el-date-picker
@@ -61,8 +61,9 @@
     <el-input type="textarea" v-model="form.desc"></el-input>
   </el-form-item>
   <el-form-item>
-    <el-button type="primary" @click="onSubmit">确认</el-button>
-    <el-button>取消</el-button>
+    <el-button type="primary" @click="onSubmit('form')">确认</el-button>
+    <!-- <el-button>取消</el-button> -->
+    <el-button @click="resetForm('form')">重置</el-button>
   </el-form-item>
 </el-form>
     
@@ -72,7 +73,17 @@
   import qs from 'qs'
   export default {
     data() {
-      return {
+      var checkAge = (rule, value, callback) => {
+          if (value === '') {
+            callback(new Error('请输入密码'));
+          } else {
+            if (this.ruleForm.checkPass !== '') {
+              this.$refs.ruleForm.validateField('checkPass');
+            }
+            callback();
+          }
+      }
+      return {          
         options: [],
         CodeStorage:[],
         form: {
@@ -90,6 +101,17 @@
             // type: [],
             // resource: '',
             // desc: ''
+        },
+        
+        rules: {
+          // code_pallet: [
+          //   { required: true, message: '请输入活动名称', trigger: 'blur' }
+          //   // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          // ],
+          startTime: [
+            { required: true, message: '请输入QR发行日期', trigger: 'blur' }
+            // { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
+          ]
         }
       }
     },
@@ -117,20 +139,27 @@
           })
     },
     methods: {
-      onSubmit() {
-        //   alert(this.$message.error(this.form.startTime))
-        //   console.log(this.form.startTime)
-        console.log(this.form.startTime);
-        API.post('/findInstallJpbpPalletBind/submit',JSON.stringify(this.form))
-        .then((res)=>{
-            if(res.code === 20000){    
-                this.$message.success(res.message);
-            //   this.$message.success(res.data);
-            }else{               
-               this.$message.error(res.message);
-            }
-            console.log(res)
-          })
+      onSubmit(form) {
+        this.$refs[form].validate((valid) => {
+          if (valid) {
+            API.post('/findInstallJpbpPalletBind/submit',JSON.stringify(this.form))
+            .then((res)=>{
+                if(res.code === 20000){    
+                    this.$message.success(res.message);
+                }else{               
+                   this.$message.error(res.message);
+                }
+                console.log(res)
+              })
+          } else {
+            console.log('error submit!!');
+            return false;
+          }
+        })
+      },
+      // 重置
+      resetForm(form) {
+        this.$refs[form].resetFields();
       }
     }
   }
